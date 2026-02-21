@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crypto Empire Tycoon</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            text-align: center;
+            padding: 30px 0;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 20px;
+            margin-bottom: 30px;
+            backdrop-filter: blur(10px);
+        }
+
+        h1 {
+            font-size: 3rem;
+            margin-bottom: 10px;
+            text-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        .stats-bar {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: rgba(0, 0, 0, 0.4);
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            transition: transform 0.3s;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(255, 255, 255, 0.3);
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            opacity: 0.8;
+            margin-bottom: 5px;
+        }
+
+        .stat-value {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #ffd700;
+        }
+
+        .main-grid {
+            display: grid;
+            grid-template-columns: 1fr 1.5fr;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .panel {
+            background: rgba(0, 0, 0, 0.4);
+            border-radius: 20px;
+            padding: 25px;
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .panel-title {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .clicker-section {
+            text-align: center;
+        }
+
+        #clickButton {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            border: 5px solid white;
+            font-size: 3rem;
+            cursor: pointer;
+            transition: all 0.1s;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            margin: 20px 0;
+        }
+
+        #clickButton:active {
+            transform: scale(0.95);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .click-power {
+            font-size: 1.2rem;
+            margin-top: 10px;
+            opacity: 0.9;
+        }
+
+        .upgrades-grid {
+            display: grid;
+            gap: 10px;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .upgrade-item {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 15px;
+            border-radius: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: background 0.3s;
+        }
+
+        .upgrade-item:hover {
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .upgrade-info {
+            flex: 1;
+        }
+
+        .upgrade-name {
+            font-weight: bold;
+            font-size: 1.1rem;
+            margin-bottom: 5px;
+        }
+
+        .upgrade-desc {
+            font-size: 0.85rem;
+            opacity: 0.8;
+        }
+
+        .upgrade-stats {
+            font-size: 0.9rem;
+            color: #ffd700;
+            margin-top: 5px;
+        }
+
+        .buy-btn {
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .buy-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(56, 239, 125, 0.4);
+        }
+
+        .buy-btn:disabled {
+            background: gray;
+            cursor: not-allowed;
+            opacity: 0.5;
+        }
+
+        .crypto-grid {
+            display: grid;
+            gap: 15px;
+        }
+
+        .crypto-card {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 15px;
+            border-left: 5px solid;
+        }
+
+        .crypto-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .crypto-name {
+            font-size: 1.3rem;
+            font-weight: bold;
+        }
+
+        .crypto-price {
+            font-size: 1.5rem;
+            color: #ffd700;
+        }
+
+        .crypto-change {
+            font-size: 0.9rem;
+            margin-bottom: 10px;
+        }
+
+        .crypto-change.up { color: #4ade80; }
+        .crypto-change.down { color: #f87171; }
+
+        .crypto-actions {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 10px;
+        }
+
+        .crypto-input {
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: white;
+            padding: 8px;
+            border-radius: 5px;
+            width: 100%;
+        }
+
+        .crypto-holdings {
+            margin-top: 10px;
+            padding-top: 10px;
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+            font-size: 0.9rem;
+        }
+
+        .property-grid {
+            display: grid;
+            gap: 15px;
+        }
+
+        .property-card {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 15px;
+            border-left: 5px solid #f59e0b;
+        }
+
+        .property-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .property-name {
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+
+        .property-price {
+            font-size: 1.3rem;
+            color: #ffd700;
+        }
+
+        .property-info {
+            font-size: 0.9rem;
+            opacity: 0.9;
+            margin-bottom: 10px;
+        }
+
+        .property-stats {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 10px;
+            padding-top: 10px;
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+            font-size: 0.85rem;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .tab-btn {
+            flex: 1;
+            padding: 12px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .tab-btn.active {
+            background: rgba(255, 255, 255, 0.3);
+            border-color: white;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .floating-number {
+            position: fixed;
+            font-size: 2rem;
+            font-weight: bold;
+            color: #ffd700;
+            pointer-events: none;
+            animation: floatUp 1s ease-out forwards;
+            text-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+        }
+
+        @keyframes floatUp {
+            to {
+                opacity: 0;
+                transform: translateY(-100px);
+            }
+        }
+
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(0, 0, 0, 0.9);
+            padding: 15px 25px;
+            border-radius: 10px;
+            border-left: 5px solid #4ade80;
+            animation: slideIn 0.3s ease-out;
+            z-index: 1000;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(400px);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: rgba(255,255,255,0.1); border-radius: 10px; }
+        ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.3); border-radius: 10px; }
+
+        @media (max-width: 968px) {
+            .main-grid { grid-template-columns: 1fr; }
+            h1 { font-size: 2rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>💰 Crypto Empire Tycoon 🏰</h1>
+            <p class="subtitle">Click, Invest, Build Your Fortune!</p>
+        </header>
+
+        <div class="stats-bar">
+            <div class="stat-card">
+                <div class="stat-label">💵 Cash</div>
+                <div class="stat-value" id="cashDisplay">$0</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">📈 Portfolio Value</div>
+                <div class="stat-value" id="portfolioValue">$0</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">🏠 Properties Owned</div>
+                <div class="stat-value" id="propertiesOwned">0</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">💎 Net Worth</div>
+                <div class="stat-value" id="netWorth">$0</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">💰 Income/sec</div>
+                <div class="stat-value" id="incomePerSec">$0</div>
+            </div>
+        </div>
+
+        <div class="main-grid">
+            <div class="panel">
+                <div class="panel-title">🖱️ Click to Earn</div>
+                <div class="clicker-section">
+                    <button id="clickButton">💸</button>
+                    <div class="click-power">+$<span id="clickPower">1</span> per click</div>
+                    <div style="margin-top: 20px; opacity: 0.8;">Total Clicks: <span id="totalClicks">0</span></div>
+                </div>
+            </div>
+
+            <div class="panel">
+                <div class="panel-title">⚡ Upgrades</div>
+                <div class="upgrades-grid" id="upgradesContainer"></div>
+            </div>
+        </div>
+
+        <div class="panel">
+            <div class="tabs">
+                <button class="tab-btn active" onclick="switchTab('crypto', event)">📊 Crypto Trading</button>
+                <button class="tab-btn" onclick="switchTab('realestate', event)">🏠 Real Estate</button>
+            </div>
+
+            <div id="crypto" class="tab-content active">
+                <div class="crypto-grid" id="cryptoContainer"></div>
+            </div>
+
+            <div id="realestate" class="tab-content">
+                <div class="property-grid" id="propertyContainer"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ─── Game State ───────────────────────────────────────────────────────────
+        let gameState = {
+            cash: 100,
+            clickPower: 1,
+            totalClicks: 0,
+            incomePerSecond: 0,
+            cryptoHoldings: {},
+            properties: [],
+            upgrades: []
+        };
+
+        // ─── Upgrades ─────────────────────────────────────────────────────────────
+        const upgrades = [
+            { id: 'cursor',     name: '🖱️ Better Mouse',        cost: 15,      power: 1,   income: 0,     owned: 0, desc: '+1 per click' },
+            { id: 'keyboard',   name: '⌨️ Mechanical Keyboard', cost: 100,     power: 5,   income: 0,     owned: 0, desc: '+5 per click' },
+            { id: 'laptop',     name: '💻 Gaming Laptop',        cost: 500,     power: 0,   income: 1,     owned: 0, desc: '+$1/sec' },
+            { id: 'office',     name: '🏢 Home Office',          cost: 2000,    power: 25,  income: 5,     owned: 0, desc: '+25 click, +$5/sec' },
+            { id: 'team',       name: '👥 Dev Team',             cost: 10000,   power: 0,   income: 50,    owned: 0, desc: '+$50/sec' },
+            { id: 'datacenter', name: '🖥️ Data Center',          cost: 50000,   power: 0,   income: 500,   owned: 0, desc: '+$500/sec' },
+            { id: 'ai',         name: '🤖 AI Trading Bot',       cost: 200000,  power: 100, income: 2000,  owned: 0, desc: '+100 click, +$2000/sec' }
+        ];
+
+        // ─── Crypto Currencies ────────────────────────────────────────────────────
+        const cryptos = [
+            { id: 'btc',  name: '₿ Bitcoin',   color: '#f7931a', basePrice: 45000, volatility: 0.03 },
+            { id: 'eth',  name: 'Ξ Ethereum',   color: '#627eea', basePrice: 2500,  volatility: 0.04 },
+            { id: 'doge', name: '🐕 Dogecoin',  color: '#c2a633', basePrice: 0.15,  volatility: 0.08 },
+            { id: 'sol',  name: '◎ Solana',     color: '#00d4aa', basePrice: 100,   volatility: 0.05 }
+        ];
+
+        // ─── Properties ───────────────────────────────────────────────────────────
+        const properties = [
+            { id: 'condo',      name: '🏙️ City Condo',      cost: 50000,    income: 100,    desc: 'Small apartment in the city' },
+            { id: 'house',      name: '🏡 Suburban House',   cost: 200000,   income: 500,    desc: '3BR family home' },
+            { id: 'mansion',    name: '🏰 Luxury Mansion',   cost: 1000000,  income: 3000,   desc: 'Beachfront property' },
+            { id: 'skyscraper', name: '🏢 Office Tower',     cost: 5000000,  income: 20000,  desc: '50-story building' },
+            { id: 'mall',       name: '🏬 Shopping Mall',    cost: 25000000, income: 150000, desc: 'Mega retail complex' }
+        ];
+
+        // ─── Init crypto state ────────────────────────────────────────────────────
+        cryptos.forEach(c => {
+            c.currentPrice = c.basePrice;
+            c.priceHistory = [c.basePrice];
+            gameState.cryptoHoldings[c.id] = 0;
+        });
+
+        // ─── Click handler ────────────────────────────────────────────────────────
+        document.getElementById('clickButton').addEventListener('click', function (e) {
+            const amount = gameState.clickPower;
+            gameState.cash += amount;
+            gameState.totalClicks++;
+
+            const el = document.createElement('div');
+            el.className = 'floating-number';
+            el.textContent = `+$${formatNumber(amount)}`;
+            el.style.left = e.clientX + 'px';
+            el.style.top  = e.clientY + 'px';
+            document.body.appendChild(el);
+            setTimeout(() => el.remove(), 1000);
+
+            updateDisplay();
+        });
+
+        // ─── Buy upgrade ──────────────────────────────────────────────────────────
+        function buyUpgrade(id) {
+            const u = upgrades.find(u => u.id === id);
+            const cost = Math.floor(u.cost * Math.pow(1.15, u.owned));
+            if (gameState.cash < cost) return;
+
+            gameState.cash -= cost;
+            u.owned++;
+            gameState.clickPower      += u.power;
+            gameState.incomePerSecond += u.income;
+
+            showNotification(`Purchased ${u.name}! 🎉`);
+            updateDisplay();
+        }
+
+        // ─── Crypto trading ───────────────────────────────────────────────────────
+        function buyCrypto(id, amount) {
+            const c = cryptos.find(c => c.id === id);
+            const cost = c.currentPrice * amount;
+            if (gameState.cash < cost) return;
+
+            gameState.cash -= cost;
+            gameState.cryptoHoldings[id] += amount;
+            showNotification(`Bought ${amount} ${c.name}! 📈`);
+            updateDisplay();
+        }
+
+        function sellCrypto(id, amount) {
+            const c = cryptos.find(c => c.id === id);
+            if (gameState.cryptoHoldings[id] < amount) return;
+
+            gameState.cash += c.currentPrice * amount;
+            gameState.cryptoHoldings[id] -= amount;
+            showNotification(`Sold ${amount} ${c.name}! 💰`);
+            updateDisplay();
+        }
+
+        // ─── Buy property ─────────────────────────────────────────────────────────
+        function buyProperty(id) {
+            const p = properties.find(p => p.id === id);
+            if (gameState.cash < p.cost || gameState.properties.includes(id)) return;
+
+            gameState.cash -= p.cost;
+            gameState.properties.push(id);
+            gameState.incomePerSecond += p.income;
+            showNotification(`Purchased ${p.name}! 🏠`);
+            updateDisplay();
+        }
+
+        // ─── Crypto price simulation ──────────────────────────────────────────────
+        function updateCryptoPrices() {
+            cryptos.forEach(c => {
+                const change = (Math.random() - 0.5) * c.volatility;
+                c.currentPrice = Math.max(c.currentPrice * (1 + change), c.basePrice * 0.1);
+                c.priceHistory.push(c.currentPrice);
+                if (c.priceHistory.length > 50) c.priceHistory.shift();
+            });
+            renderCrypto();
+        }
+
+        // ─── Render: upgrades ─────────────────────────────────────────────────────
+        function renderUpgrades() {
+            document.getElementById('upgradesContainer').innerHTML = upgrades.map(u => {
+                const cost = Math.floor(u.cost * Math.pow(1.15, u.owned));
+                return `
+                    <div class="upgrade-item">
+                        <div class="upgrade-info">
+                            <div class="upgrade-name">${u.name}</div>
+                            <div class="upgrade-desc">${u.desc}</div>
+                            <div class="upgrade-stats">Owned: ${u.owned} | Cost: $${formatNumber(cost)}</div>
+                        </div>
+                        <button class="buy-btn" onclick="buyUpgrade('${u.id}')" ${gameState.cash < cost ? 'disabled' : ''}>Buy</button>
+                    </div>`;
+            }).join('');
+        }
+
+        // ─── Render: crypto ───────────────────────────────────────────────────────
+        function renderCrypto() {
+            document.getElementById('cryptoContainer').innerHTML = cryptos.map(c => {
+                const holdings  = gameState.cryptoHoldings[c.id];
+                const prevPrice = c.priceHistory[c.priceHistory.length - 2] || c.currentPrice;
+                const pct       = ((c.currentPrice - prevPrice) / prevPrice * 100).toFixed(2);
+                const isUp      = pct >= 0;
+                return `
+                    <div class="crypto-card" style="border-left-color:${c.color}">
+                        <div class="crypto-header">
+                            <div class="crypto-name">${c.name}</div>
+                            <div class="crypto-price">$${formatNumber(c.currentPrice)}</div>
+                        </div>
+                        <div class="crypto-change ${isUp ? 'up' : 'down'}">
+                            ${isUp ? '📈' : '📉'} ${isUp ? '+' : ''}${pct}%
+                        </div>
+                        <div class="crypto-actions">
+                            <input type="number" id="${c.id}-amount" class="crypto-input" placeholder="Amount" min="0.001" step="0.001" value="1">
+                            <button class="buy-btn"  onclick="buyCrypto('${c.id}',  parseFloat(document.getElementById('${c.id}-amount').value))">Buy</button>
+                            <button class="buy-btn"  onclick="sellCrypto('${c.id}', parseFloat(document.getElementById('${c.id}-amount').value))">Sell</button>
+                        </div>
+                        ${holdings > 0 ? `<div class="crypto-holdings">💼 Holdings: ${holdings.toFixed(4)} (≈ $${formatNumber(holdings * c.currentPrice)})</div>` : ''}
+                    </div>`;
+            }).join('');
+        }
+
+        // ─── Render: properties ───────────────────────────────────────────────────
+        function renderProperties() {
+            document.getElementById('propertyContainer').innerHTML = properties.map(p => {
+                const owned = gameState.properties.includes(p.id);
+                return `
+                    <div class="property-card">
+                        <div class="property-header">
+                            <div class="property-name">${p.name}</div>
+                            <div class="property-price">$${formatNumber(p.cost)}</div>
+                        </div>
+                        <div class="property-info">${p.desc}</div>
+                        <div class="property-stats">
+                            <span>💰 Income: $${formatNumber(p.income)}/sec</span>
+                            <span>${owned ? '✅ Owned' : ''}</span>
+                        </div>
+                        ${!owned ? `<button class="buy-btn" style="width:100%;margin-top:10px" onclick="buyProperty('${p.id}')" ${gameState.cash < p.cost ? 'disabled' : ''}>Purchase Property</button>` : ''}
+                    </div>`;
+            }).join('');
+        }
+
+        // ─── Update all displays ──────────────────────────────────────────────────
+        function updateDisplay() {
+            document.getElementById('cashDisplay').textContent  = '$' + formatNumber(gameState.cash);
+            document.getElementById('clickPower').textContent   = formatNumber(gameState.clickPower);
+            document.getElementById('totalClicks').textContent  = formatNumber(gameState.totalClicks);
+            document.getElementById('incomePerSec').textContent = '$' + formatNumber(gameState.incomePerSecond);
+            document.getElementById('propertiesOwned').textContent = gameState.properties.length;
+
+            const portfolio = cryptos.reduce((s, c) => s + gameState.cryptoHoldings[c.id] * c.currentPrice, 0);
+            const propValue = gameState.properties.reduce((s, id) => {
+                const p = properties.find(p => p.id === id);
+                return s + (p ? p.cost : 0);
+            }, 0);
+
+            document.getElementById('portfolioValue').textContent = '$' + formatNumber(portfolio);
+            document.getElementById('netWorth').textContent       = '$' + formatNumber(gameState.cash + portfolio + propValue);
+
+            renderUpgrades();
+            renderProperties();
+        }
+
+        // ─── Helpers ──────────────────────────────────────────────────────────────
+        function formatNumber(n) {
+            if (n >= 1e12) return (n / 1e12).toFixed(2) + 'T';
+            if (n >= 1e9)  return (n / 1e9).toFixed(2)  + 'B';
+            if (n >= 1e6)  return (n / 1e6).toFixed(2)  + 'M';
+            if (n >= 1e3)  return (n / 1e3).toFixed(2)  + 'K';
+            return n.toFixed(2);
+        }
+
+        function showNotification(msg) {
+            const el = document.createElement('div');
+            el.className = 'notification';
+            el.textContent = msg;
+            document.body.appendChild(el);
+            setTimeout(() => el.remove(), 3000);
+        }
+
+        function switchTab(tab, e) {
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            e.target.classList.add('active');
+            document.getElementById(tab).classList.add('active');
+        }
+
+        // ─── Game loops ───────────────────────────────────────────────────────────
+        setInterval(() => { gameState.cash += gameState.incomePerSecond; updateDisplay(); }, 1000);
+        setInterval(updateCryptoPrices, 3000);
+
+        // ─── Persistence (localStorage) ───────────────────────────────────────────
+        setInterval(() => localStorage.setItem('cryptoEmpireSave', JSON.stringify(gameState)), 10000);
+
+        const save = localStorage.getItem('cryptoEmpireSave');
+        if (save) {
+            const loaded = JSON.parse(save);
+            gameState = { ...gameState, ...loaded };
+            upgrades.forEach(u => {
+                const su = loaded.upgrades?.find(x => x.id === u.id);
+                if (su) u.owned = su.owned;
+            });
+        }
+
+        // ─── Boot ─────────────────────────────────────────────────────────────────
+        updateDisplay();
+        renderCrypto();
+    </script>
+</body>
+</html>
