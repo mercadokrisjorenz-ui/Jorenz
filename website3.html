@@ -1,0 +1,1927 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grade 8 STE Planner - Academic Organizer</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700&family=DM+Serif+Display&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #2563eb;
+            --secondary: #7c3aed;
+            --accent: #f59e0b;
+            --success: #10b981;
+            --danger: #ef4444;
+            --bg-dark: #0f172a;
+            --bg-medium: #1e293b;
+            --bg-light: #334155;
+            --text-white: #f8fafc;
+            --text-gray: #cbd5e1;
+            --border: #475569;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: var(--bg-dark);
+            color: var(--text-white);
+            min-height: 100vh;
+            position: relative;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 20%, rgba(37, 99, 235, 0.15), transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(124, 58, 237, 0.15), transparent 50%);
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 1.5rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Header */
+        header {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            padding: 2rem;
+            border-radius: 20px;
+            margin-bottom: 2rem;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+            animation: slideDown 0.6s ease-out;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        h1 {
+            font-family: 'DM Serif Display', serif;
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .subtitle {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        /* Navigation Tabs */
+        .nav-tabs {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+            animation: fadeIn 0.8s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .tab-btn {
+            padding: 1rem 2rem;
+            background: var(--bg-medium);
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            color: var(--text-gray);
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Outfit', sans-serif;
+        }
+
+        .tab-btn:hover {
+            background: var(--bg-light);
+            border-color: var(--primary);
+        }
+
+        .tab-btn.active {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-color: transparent;
+            color: var(--text-white);
+            box-shadow: 0 4px 15px rgba(37, 99, 235, 0.4);
+        }
+
+        /* Content Sections */
+        .content-section {
+            display: none;
+            animation: fadeInUp 0.5s ease-out;
+        }
+
+        .content-section.active {
+            display: block;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .grid {
+            display: grid;
+            gap: 1.5rem;
+        }
+
+        .grid-2 {
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+        }
+
+        .card {
+            background: var(--bg-medium);
+            border-radius: 16px;
+            padding: 2rem;
+            border: 1px solid var(--border);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+            border-color: var(--primary);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid var(--border);
+        }
+
+        .card-icon {
+            font-size: 2rem;
+        }
+
+        .card-title {
+            font-family: 'DM Serif Display', serif;
+            font-size: 1.5rem;
+            color: var(--text-white);
+        }
+
+        /* Inputs */
+        input[type="text"],
+        input[type="time"],
+        select,
+        textarea {
+            width: 100%;
+            padding: 0.9rem;
+            background: var(--bg-dark);
+            border: 2px solid var(--border);
+            border-radius: 10px;
+            color: var(--text-white);
+            font-size: 1rem;
+            font-family: 'Outfit', sans-serif;
+            transition: all 0.3s ease;
+        }
+
+        input:focus,
+        select:focus,
+        textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+
+        textarea {
+            min-height: 150px;
+            resize: vertical;
+        }
+
+        /* Buttons */
+        .btn {
+            padding: 0.9rem 1.8rem;
+            border: none;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Outfit', sans-serif;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            box-shadow: 0 4px 15px rgba(37, 99, 235, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(37, 99, 235, 0.5);
+        }
+
+        .btn-secondary {
+            background: var(--bg-light);
+            color: var(--text-white);
+            border: 2px solid var(--border);
+        }
+
+        .btn-secondary:hover {
+            background: var(--bg-medium);
+            border-color: var(--primary);
+        }
+
+        .btn-success {
+            background: var(--success);
+            color: white;
+        }
+
+        .btn-danger {
+            background: var(--danger);
+            color: white;
+        }
+
+        .btn-small {
+            padding: 0.5rem 1rem;
+            font-size: 0.85rem;
+        }
+
+        /* Subject Badge */
+        .subject-badge {
+            display: inline-block;
+            padding: 0.4rem 1rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-right: 0.5rem;
+        }
+
+        .subject-math { background: rgba(239, 68, 68, 0.2); color: #fca5a5; }
+        .subject-science { background: rgba(34, 197, 94, 0.2); color: #86efac; }
+        .subject-english { background: rgba(59, 130, 246, 0.2); color: #93c5fd; }
+        .subject-filipino { background: rgba(245, 158, 11, 0.2); color: #fcd34d; }
+        .subject-ap { background: rgba(168, 85, 247, 0.2); color: #d8b4fe; }
+        .subject-cs { background: rgba(20, 184, 166, 0.2); color: #5eead4; }
+        .subject-biotech { background: rgba(16, 185, 129, 0.2); color: #6ee7b7; }
+        .subject-mapeh { background: rgba(236, 72, 153, 0.2); color: #f9a8d4; }
+        .subject-esp { background: rgba(99, 102, 241, 0.2); color: #c7d2fe; }
+
+        /* Task List */
+        .task-form {
+            display: grid;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        .task-item {
+            background: var(--bg-dark);
+            padding: 1rem;
+            border-radius: 10px;
+            margin-bottom: 0.8rem;
+            border-left: 4px solid var(--primary);
+            transition: all 0.3s ease;
+            animation: slideIn 0.3s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .task-item:hover {
+            background: var(--bg-light);
+            transform: translateX(5px);
+        }
+
+        .task-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+
+        .task-title {
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+
+        .task-meta {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+            margin-top: 0.5rem;
+            font-size: 0.9rem;
+            color: var(--text-gray);
+        }
+
+        /* Schedule View */
+        .schedule-grid {
+            display: grid;
+            gap: 1rem;
+        }
+
+        .schedule-item {
+            background: var(--bg-dark);
+            padding: 1.2rem;
+            border-radius: 12px;
+            border-left: 5px solid var(--accent);
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .schedule-time {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--accent);
+            min-width: 80px;
+        }
+
+        .schedule-content {
+            flex: 1;
+        }
+
+        .schedule-task {
+            font-weight: 600;
+            margin-bottom: 0.3rem;
+        }
+
+        /* Timer */
+        .timer-display {
+            text-align: center;
+            font-size: 5rem;
+            font-family: 'DM Serif Display', serif;
+            color: var(--text-white);
+            margin: 2rem 0;
+            font-weight: 700;
+            text-shadow: 0 0 30px rgba(37, 99, 235, 0.5);
+        }
+
+        .timer-controls {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 1.5rem;
+        }
+
+        .timer-presets {
+            display: flex;
+            gap: 0.5rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        /* Flashcards */
+        .flashcard-container {
+            perspective: 1000px;
+            margin-bottom: 2rem;
+        }
+
+        .flashcard {
+            position: relative;
+            width: 100%;
+            min-height: 300px;
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
+            cursor: pointer;
+        }
+
+        .flashcard.flipped {
+            transform: rotateY(180deg);
+        }
+
+        .flashcard-front,
+        .flashcard-back {
+            position: absolute;
+            width: 100%;
+            min-height: 300px;
+            backface-visibility: hidden;
+            border-radius: 16px;
+            padding: 3rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            font-size: 1.5rem;
+        }
+
+        .flashcard-front {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+        }
+
+        .flashcard-back {
+            background: linear-gradient(135deg, var(--secondary), #ec4899);
+            transform: rotateY(180deg);
+        }
+
+        .flashcard-controls {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-top: 1.5rem;
+        }
+
+        .flashcard-form {
+            display: grid;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .flashcard-list {
+            display: grid;
+            gap: 0.8rem;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .flashcard-list-item {
+            background: var(--bg-dark);
+            padding: 1rem;
+            border-radius: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        /* Notes */
+        .notes-list {
+            display: grid;
+            gap: 1rem;
+        }
+
+        .note-item {
+            background: var(--bg-dark);
+            padding: 1.5rem;
+            border-radius: 12px;
+            border-left: 4px solid var(--success);
+        }
+
+        .note-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .note-subject {
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+
+        .note-date {
+            font-size: 0.85rem;
+            color: var(--text-gray);
+        }
+
+        .note-content {
+            color: var(--text-gray);
+            line-height: 1.6;
+        }
+
+        /* Progress Bar */
+        .progress-container {
+            background: var(--bg-dark);
+            border-radius: 10px;
+            padding: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .progress-label {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+            color: var(--text-gray);
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 12px;
+            background: var(--bg-light);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--success), var(--accent));
+            transition: width 0.5s ease;
+            border-radius: 10px;
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg-dark);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--primary);
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--secondary);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2rem;
+            }
+
+            .grid-2 {
+                grid-template-columns: 1fr;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .timer-display {
+                font-size: 3.5rem;
+            }
+
+            .flashcard-front,
+            .flashcard-back {
+                font-size: 1.2rem;
+                padding: 2rem;
+            }
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 3rem;
+            color: var(--text-gray);
+        }
+
+        .empty-state-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            opacity: 0.5;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>📚 Grade 8 STE Planner</h1>
+            <p class="subtitle">Your Complete Academic Organizer for Philippine STE Curriculum</p>
+        </header>
+
+        <!-- Navigation -->
+        <div class="nav-tabs">
+            <button class="tab-btn active" onclick="switchTab('tasks')">📋 Tasks & Schedule</button>
+            <button class="tab-btn" onclick="switchTab('timer')">⏱️ Focus Timer</button>
+            <button class="tab-btn" onclick="switchTab('music')">🎵 Study Music</button>
+            <button class="tab-btn" onclick="switchTab('lessons')">📖 Learn Lessons</button>
+            <button class="tab-btn" onclick="switchTab('flashcards')">🎯 Flashcard Reviewer</button>
+            <button class="tab-btn" onclick="switchTab('notes')">📝 Notes</button>
+        </div>
+
+        <!-- Tasks & Schedule Section -->
+        <div id="tasks" class="content-section active">
+            <div class="grid grid-2">
+                <!-- Add Task Card -->
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-icon">➕</span>
+                        <h2 class="card-title">Add New Task</h2>
+                    </div>
+                    <form class="task-form" onsubmit="addTask(event)">
+                        <input type="text" id="taskName" placeholder="Task name (e.g., Math homework)" required>
+                        <select id="taskSubject" required>
+                            <option value="">Select Subject</option>
+                            <option value="mathematics">Mathematics</option>
+                            <option value="science">Science</option>
+                            <option value="english">English</option>
+                            <option value="filipino">Filipino</option>
+                            <option value="ap">Araling Panlipunan</option>
+                            <option value="cs">Computer Science</option>
+                            <option value="biotech">Biotechnology</option>
+                            <option value="mapeh">MAPEH</option>
+                            <option value="esp">ESP</option>
+                        </select>
+                        <input type="text" id="taskDuration" placeholder="Duration (e.g., 1 hour, 30 mins)" required>
+                        <button type="submit" class="btn btn-primary">Add Task (Auto-Schedule)</button>
+                        <p style="font-size: 0.9rem; color: var(--text-gray); margin-top: 0.5rem;">
+                            ⏰ Time will be automatically scheduled based on your day!
+                        </p>
+                    </form>
+
+                    <div class="progress-container">
+                        <div class="progress-label">
+                            <span>Today's Progress</span>
+                            <span id="progressPercent">0%</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Today's Schedule -->
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-icon">📅</span>
+                        <h2 class="card-title">Today's Schedule</h2>
+                    </div>
+                    <div class="schedule-grid" id="scheduleList">
+                        <div class="empty-state">
+                            <div class="empty-state-icon">📋</div>
+                            <p>No tasks scheduled yet. Add your first task!</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Task List -->
+            <div class="card" style="margin-top: 1.5rem;">
+                <div class="card-header">
+                    <span class="card-icon">✓</span>
+                    <h2 class="card-title">All Tasks</h2>
+                </div>
+                <div id="taskList"></div>
+            </div>
+        </div>
+
+        <!-- Focus Timer Section -->
+        <div id="timer" class="content-section">
+            <div class="card">
+                <div class="card-header">
+                    <span class="card-icon">⏱️</span>
+                    <h2 class="card-title">Pomodoro Focus Timer</h2>
+                </div>
+                <div class="timer-display" id="timerDisplay">25:00</div>
+                <div class="timer-controls">
+                    <button class="btn btn-primary" id="startBtn">▶ Start</button>
+                    <button class="btn btn-secondary" id="pauseBtn">⏸ Pause</button>
+                    <button class="btn btn-secondary" id="resetBtn">↻ Reset</button>
+                </div>
+                <div class="timer-presets">
+                    <button class="btn btn-secondary btn-small" onclick="setTimer(25)">25 min (Pomodoro)</button>
+                    <button class="btn btn-secondary btn-small" onclick="setTimer(45)">45 min (Deep Work)</button>
+                    <button class="btn btn-secondary btn-small" onclick="setTimer(5)">5 min (Short Break)</button>
+                    <button class="btn btn-secondary btn-small" onclick="setTimer(15)">15 min (Long Break)</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Study Music Section -->
+        <div id="music" class="content-section">
+            <div class="grid grid-2">
+                <!-- Music Preferences -->
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-icon">🎵</span>
+                        <h2 class="card-title">Your Music Preferences</h2>
+                    </div>
+                    
+                    <div style="margin-bottom: 1.5rem;">
+                        <label style="display: block; margin-bottom: 0.5rem; color: var(--text-gray);">Study Mood:</label>
+                        <select id="studyMood" onchange="updateMusicRecommendations()">
+                            <option value="">Select your vibe...</option>
+                            <option value="focus">🎯 Deep Focus (Lo-fi, Ambient)</option>
+                            <option value="energetic">⚡ Energetic (Pop, Upbeat)</option>
+                            <option value="calm">😌 Calm & Relaxed (Acoustic, Classical)</option>
+                            <option value="motivated">💪 Motivated (Workout, Hip-hop)</option>
+                            <option value="creative">🎨 Creative Flow (Indie, Alternative)</option>
+                        </select>
+                    </div>
+
+                    <div style="margin-bottom: 1.5rem;">
+                        <label style="display: block; margin-bottom: 0.5rem; color: var(--text-gray);">Favorite Artists/Genres:</label>
+                        <input type="text" id="favoriteArtists" placeholder="e.g., Taylor Swift, BTS, Lo-fi, K-pop">
+                        <p style="font-size: 0.85rem; color: var(--text-gray); margin-top: 0.5rem;">
+                            💡 Enter your favorite artists or genres
+                        </p>
+                    </div>
+
+                    <button class="btn btn-primary" onclick="savePreferences()">
+                        Save Preferences & Get Recommendations
+                    </button>
+
+                    <div id="spotifyConnect" style="margin-top: 2rem; padding: 1.5rem; background: var(--bg-dark); border-radius: 12px; border: 2px dashed var(--border);">
+                        <h4 style="color: var(--accent); margin-bottom: 1rem;">🎧 Connect to Spotify</h4>
+                        <p style="font-size: 0.9rem; color: var(--text-gray); margin-bottom: 1rem;">
+                            To play music directly from Spotify, you'll need to:
+                        </p>
+                        <ol style="font-size: 0.9rem; color: var(--text-gray); margin-left: 1.5rem; line-height: 1.8;">
+                            <li>Open Spotify on your device</li>
+                            <li>Search for the recommended playlists below</li>
+                            <li>Or use the embedded playlists!</li>
+                        </ol>
+                    </div>
+                </div>
+
+                <!-- Current Playing / Recommendations -->
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-icon">🎧</span>
+                        <h2 class="card-title">Recommended Playlists</h2>
+                    </div>
+                    
+                    <div id="musicRecommendations">
+                        <div class="empty-state">
+                            <div class="empty-state-icon">🎵</div>
+                            <p>Set your preferences to get personalized recommendations!</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Embedded Spotify Playlists -->
+            <div class="card" id="spotifyEmbed" style="margin-top: 1.5rem; display: none;">
+                <div class="card-header">
+                    <span class="card-icon">▶️</span>
+                    <h2 class="card-title">Study Playlist Player</h2>
+                </div>
+                <div id="playlistEmbed"></div>
+                <p style="margin-top: 1rem; font-size: 0.9rem; color: var(--text-gray);">
+                    💡 Click play to start studying with music! The playlist will continue playing while you work.
+                </p>
+            </div>
+
+            <!-- Quick Access Playlists -->
+            <div class="card" style="margin-top: 1.5rem;">
+                <div class="card-header">
+                    <span class="card-icon">⚡</span>
+                    <h2 class="card-title">Quick Study Playlists</h2>
+                </div>
+                <div style="display: grid; gap: 1rem;">
+                    <div class="task-item" style="cursor: pointer;" onclick="loadPlaylist('lofi')">
+                        <div class="task-header">
+                            <div>
+                                <div class="task-title">🎵 Lo-fi Beats to Study</div>
+                                <p style="color: var(--text-gray); font-size: 0.9rem; margin-top: 0.3rem;">Chill instrumental beats perfect for focus</p>
+                            </div>
+                            <span style="color: var(--accent);">▶️ Play</span>
+                        </div>
+                    </div>
+                    <div class="task-item" style="cursor: pointer;" onclick="loadPlaylist('classical')">
+                        <div class="task-header">
+                            <div>
+                                <div class="task-title">🎻 Classical Focus</div>
+                                <p style="color: var(--text-gray); font-size: 0.9rem; margin-top: 0.3rem;">Classical music for concentration</p>
+                            </div>
+                            <span style="color: var(--accent);">▶️ Play</span>
+                        </div>
+                    </div>
+                    <div class="task-item" style="cursor: pointer;" onclick="loadPlaylist('ambient')">
+                        <div class="task-header">
+                            <div>
+                                <div class="task-title">🌊 Ambient Study</div>
+                                <p style="color: var(--text-gray); font-size: 0.9rem; margin-top: 0.3rem;">Peaceful ambient sounds</p>
+                            </div>
+                            <span style="color: var(--accent);">▶️ Play</span>
+                        </div>
+                    </div>
+                    <div class="task-item" style="cursor: pointer;" onclick="loadPlaylist('kpop')">
+                        <div class="task-header">
+                            <div>
+                                <div class="task-title">🎤 K-Pop Study Mix</div>
+                                <p style="color: var(--text-gray); font-size: 0.9rem; margin-top: 0.3rem;">Upbeat K-pop for motivation</p>
+                            </div>
+                            <span style="color: var(--accent);">▶️ Play</span>
+                        </div>
+                    </div>
+                    <div class="task-item" style="cursor: pointer;" onclick="loadPlaylist('opm')">
+                        <div class="task-header">
+                            <div>
+                                <div class="task-title">🇵🇭 OPM Chill</div>
+                                <p style="color: var(--text-gray); font-size: 0.9rem; margin-top: 0.3rem;">Filipino music for studying</p>
+                            </div>
+                            <span style="color: var(--accent);">▶️ Play</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Lessons Section -->
+        <div id="lessons" class="content-section">
+            <div class="grid grid-2">
+                <!-- Subject Selection -->
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-icon">📚</span>
+                        <h2 class="card-title">Choose Subject</h2>
+                    </div>
+                    <div style="display: grid; gap: 1rem;">
+                        <button class="btn btn-secondary" onclick="selectLessonSubject('mathematics')">
+                            📐 Mathematics
+                        </button>
+                        <button class="btn btn-secondary" onclick="selectLessonSubject('science')">
+                            🔬 Science
+                        </button>
+                        <button class="btn btn-secondary" onclick="selectLessonSubject('english')">
+                            📖 English
+                        </button>
+                        <button class="btn btn-secondary" onclick="selectLessonSubject('filipino')">
+                            🇵🇭 Filipino
+                        </button>
+                        <button class="btn btn-secondary" onclick="selectLessonSubject('cs')">
+                            💻 Computer Science
+                        </button>
+                        <button class="btn btn-secondary" onclick="selectLessonSubject('biotech')">
+                            🧬 Biotechnology
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Lesson Topics -->
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-icon">📋</span>
+                        <h2 class="card-title">Available Topics</h2>
+                    </div>
+                    <div id="lessonTopics">
+                        <div class="empty-state">
+                            <div class="empty-state-icon">👈</div>
+                            <p>Select a subject to see available lessons</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Lesson Content -->
+            <div class="card" id="lessonContent" style="margin-top: 1.5rem; display: none;">
+                <div class="card-header">
+                    <span class="card-icon">📖</span>
+                    <h2 class="card-title" id="lessonTitle">Lesson</h2>
+                </div>
+                
+                <div id="lessonBody" style="line-height: 1.8; color: var(--text-gray);">
+                    <!-- Lesson content will be inserted here -->
+                </div>
+
+                <!-- Quiz Section -->
+                <div id="quizSection" style="margin-top: 2rem; padding-top: 2rem; border-top: 2px solid var(--border); display: none;">
+                    <h3 style="color: var(--text-white); margin-bottom: 1rem; font-family: 'DM Serif Display', serif;">
+                        📝 Quick Quiz
+                    </h3>
+                    <div id="quizQuestions"></div>
+                    <button class="btn btn-primary" onclick="checkAnswers()" style="margin-top: 1rem;">
+                        Check Answers
+                    </button>
+                    <div id="quizResults" style="margin-top: 1rem;"></div>
+                </div>
+
+                <div style="margin-top: 2rem; display: flex; gap: 1rem;">
+                    <button class="btn btn-secondary" onclick="closeLesson()">← Back to Topics</button>
+                    <button class="btn btn-primary" onclick="showQuiz()">Take Quiz 🎯</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Flashcards Section -->
+        <div id="flashcards" class="content-section">
+            <div class="grid grid-2">
+                <!-- Flashcard Viewer -->
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-icon">🎯</span>
+                        <h2 class="card-title">Flashcard Reviewer</h2>
+                    </div>
+                    <div class="flashcard-container">
+                        <div class="flashcard" id="flashcard" onclick="flipCard()">
+                            <div class="flashcard-front">
+                                <p id="flashcardQuestion">Add your first flashcard to start reviewing!</p>
+                            </div>
+                            <div class="flashcard-back">
+                                <p id="flashcardAnswer">Click to add flashcards →</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flashcard-controls">
+                        <button class="btn btn-secondary" onclick="previousCard()">← Previous</button>
+                        <button class="btn btn-primary" onclick="flipCard()">🔄 Flip Card</button>
+                        <button class="btn btn-secondary" onclick="nextCard()">Next →</button>
+                    </div>
+                    <p style="text-align: center; color: var(--text-gray); margin-top: 1rem;">
+                        Card <span id="cardNumber">0</span> of <span id="totalCards">0</span>
+                    </p>
+                </div>
+
+                <!-- Add Flashcard -->
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-icon">➕</span>
+                        <h2 class="card-title">Add Flashcard</h2>
+                    </div>
+                    <form class="flashcard-form" onsubmit="addFlashcard(event)">
+                        <select id="flashcardSubject" required>
+                            <option value="">Select Subject</option>
+                            <option value="mathematics">Mathematics</option>
+                            <option value="science">Science</option>
+                            <option value="english">English</option>
+                            <option value="filipino">Filipino</option>
+                            <option value="ap">Araling Panlipunan</option>
+                            <option value="cs">Computer Science</option>
+                            <option value="biotech">Biotechnology</option>
+                            <option value="mapeh">MAPEH</option>
+                            <option value="esp">ESP</option>
+                        </select>
+                        <input type="text" id="flashcardQ" placeholder="Question or Term" required>
+                        <textarea id="flashcardA" placeholder="Answer or Definition" rows="3" required></textarea>
+                        <button type="submit" class="btn btn-success">Add Flashcard</button>
+                    </form>
+
+                    <div class="card-header" style="margin-top: 2rem;">
+                        <span class="card-icon">📚</span>
+                        <h2 class="card-title">My Flashcards</h2>
+                    </div>
+                    <div class="flashcard-list" id="flashcardList">
+                        <div class="empty-state">
+                            <p>No flashcards yet</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Notes Section -->
+        <div id="notes" class="content-section">
+            <div class="grid grid-2">
+                <!-- Add Note -->
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-icon">📝</span>
+                        <h2 class="card-title">Create Note</h2>
+                    </div>
+                    <form onsubmit="addNote(event)">
+                        <div style="margin-bottom: 1rem;">
+                            <select id="noteSubject" required>
+                                <option value="">Select Subject</option>
+                                <option value="mathematics">Mathematics</option>
+                                <option value="science">Science</option>
+                                <option value="english">English</option>
+                                <option value="filipino">Filipino</option>
+                                <option value="ap">Araling Panlipunan</option>
+                                <option value="cs">Computer Science</option>
+                                <option value="biotech">Biotechnology</option>
+                                <option value="mapeh">MAPEH</option>
+                                <option value="esp">ESP</option>
+                            </select>
+                        </div>
+                        <div style="margin-bottom: 1rem;">
+                            <input type="text" id="noteTitle" placeholder="Note Title" required>
+                        </div>
+                        <div style="margin-bottom: 1rem;">
+                            <textarea id="noteContent" placeholder="Write your notes here..." rows="10" required></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Save Note</button>
+                    </form>
+                </div>
+
+                <!-- Notes List -->
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-icon">📚</span>
+                        <h2 class="card-title">My Notes</h2>
+                    </div>
+                    <div class="notes-list" id="notesList">
+                        <div class="empty-state">
+                            <div class="empty-state-icon">📝</div>
+                            <p>No notes yet. Create your first note!</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Initialize data from localStorage
+        let tasks = JSON.parse(localStorage.getItem('g8_tasks')) || [];
+        let flashcards = JSON.parse(localStorage.getItem('g8_flashcards')) || [];
+        let notes = JSON.parse(localStorage.getItem('g8_notes')) || [];
+        let currentCardIndex = 0;
+
+        // Tab switching
+        function switchTab(tabName) {
+            document.querySelectorAll('.content-section').forEach(section => {
+                section.classList.remove('active');
+            });
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            document.getElementById(tabName).classList.add('active');
+            event.target.classList.add('active');
+        }
+
+        // Subject mapping
+        const subjectMap = {
+            'mathematics': { name: 'Mathematics', class: 'subject-math' },
+            'science': { name: 'Science', class: 'subject-science' },
+            'english': { name: 'English', class: 'subject-english' },
+            'filipino': { name: 'Filipino', class: 'subject-filipino' },
+            'ap': { name: 'Araling Panlipunan', class: 'subject-ap' },
+            'cs': { name: 'Computer Science', class: 'subject-cs' },
+            'biotech': { name: 'Biotechnology', class: 'subject-biotech' },
+            'mapeh': { name: 'MAPEH', class: 'subject-mapeh' },
+            'esp': { name: 'ESP', class: 'subject-esp' }
+        };
+
+        // TASKS FUNCTIONS
+        
+        // Auto-scheduling logic
+        function autoScheduleTime(subject) {
+            // Preferred study times for different subjects (24-hour format)
+            const subjectPreferences = {
+                'mathematics': { start: 14, end: 16 }, // 2 PM - 4 PM (afternoon - fresh mind)
+                'science': { start: 15, end: 17 }, // 3 PM - 5 PM
+                'english': { start: 9, end: 11 }, // 9 AM - 11 AM (morning - language learning)
+                'filipino': { start: 10, end: 12 }, // 10 AM - 12 PM
+                'ap': { start: 13, end: 15 }, // 1 PM - 3 PM
+                'cs': { start: 16, end: 18 }, // 4 PM - 6 PM (afternoon - logical thinking)
+                'biotech': { start: 15, end: 17 }, // 3 PM - 5 PM
+                'mapeh': { start: 17, end: 19 }, // 5 PM - 7 PM (late afternoon - physical/creative)
+                'esp': { start: 19, end: 20 } // 7 PM - 8 PM (evening - reflection)
+            };
+
+            const pref = subjectPreferences[subject];
+            let scheduledHour = pref.start;
+            
+            // Check existing tasks to avoid conflicts
+            const existingTimes = tasks.map(t => {
+                const [hours, minutes] = t.time.split(':');
+                return parseInt(hours);
+            });
+
+            // Find an available time slot
+            while (scheduledHour <= pref.end) {
+                if (!existingTimes.includes(scheduledHour)) {
+                    break;
+                }
+                scheduledHour++;
+            }
+
+            // If no slot in preferred time, find next available slot
+            if (scheduledHour > pref.end) {
+                scheduledHour = 8; // Start from 8 AM
+                while (existingTimes.includes(scheduledHour) && scheduledHour < 21) {
+                    scheduledHour++;
+                }
+            }
+
+            // Format time as HH:MM
+            return `${scheduledHour.toString().padStart(2, '0')}:00`;
+        }
+
+        function addTask(e) {
+            e.preventDefault();
+            const subject = document.getElementById('taskSubject').value;
+            const autoTime = autoScheduleTime(subject);
+            
+            const task = {
+                id: Date.now(),
+                name: document.getElementById('taskName').value,
+                subject: subject,
+                time: autoTime,
+                duration: document.getElementById('taskDuration').value,
+                completed: false
+            };
+            
+            tasks.push(task);
+            tasks.sort((a, b) => a.time.localeCompare(b.time));
+            saveTasks();
+            renderTasks();
+            e.target.reset();
+            
+            // Show notification of scheduled time
+            alert(`✅ Task added! Scheduled for ${formatTime(autoTime)}`);
+        }
+
+        function formatTime(time) {
+            const [hours, minutes] = time.split(':');
+            const hour = parseInt(hours);
+            const ampm = hour >= 12 ? 'PM' : 'AM';
+            const displayHour = hour > 12 ? hour - 12 : (hour === 0 ? 12 : hour);
+            return `${displayHour}:${minutes} ${ampm}`;
+        }
+
+        function saveTasks() {
+            localStorage.setItem('g8_tasks', JSON.stringify(tasks));
+        }
+
+        function renderTasks() {
+            const taskList = document.getElementById('taskList');
+            const scheduleList = document.getElementById('scheduleList');
+            
+            if (tasks.length === 0) {
+                taskList.innerHTML = '<div class="empty-state"><p>No tasks yet</p></div>';
+                scheduleList.innerHTML = '<div class="empty-state"><div class="empty-state-icon">📋</div><p>No tasks scheduled yet. Add your first task!</p></div>';
+                updateProgress();
+                return;
+            }
+
+            // Render task list
+            taskList.innerHTML = tasks.map(task => {
+                const subject = subjectMap[task.subject];
+                return `
+                    <div class="task-item">
+                        <div class="task-header">
+                            <div class="task-title">${task.name}</div>
+                            <div>
+                                <button class="btn btn-success btn-small" onclick="toggleTask(${task.id})" style="margin-right: 0.5rem;">
+                                    ${task.completed ? '✓ Done' : 'Mark Done'}
+                                </button>
+                                <button class="btn btn-danger btn-small" onclick="deleteTask(${task.id})">Delete</button>
+                            </div>
+                        </div>
+                        <div class="task-meta">
+                            <span class="subject-badge ${subject.class}">${subject.name}</span>
+                            <span>🕐 ${formatTime(task.time)}</span>
+                            <span>⏱️ ${task.duration}</span>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            // Render schedule
+            scheduleList.innerHTML = tasks.map(task => {
+                const subject = subjectMap[task.subject];
+                return `
+                    <div class="schedule-item">
+                        <div class="schedule-time">${formatTime(task.time)}</div>
+                        <div class="schedule-content">
+                            <div class="schedule-task">${task.name}</div>
+                            <span class="subject-badge ${subject.class}">${subject.name}</span>
+                            <span style="color: var(--text-gray); margin-left: 1rem;">⏱️ ${task.duration}</span>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            updateProgress();
+        }
+
+        function toggleTask(id) {
+            const task = tasks.find(t => t.id === id);
+            if (task) {
+                task.completed = !task.completed;
+                saveTasks();
+                renderTasks();
+            }
+        }
+
+        function deleteTask(id) {
+            if (confirm('Delete this task?')) {
+                tasks = tasks.filter(t => t.id !== id);
+                saveTasks();
+                renderTasks();
+            }
+        }
+
+        function updateProgress() {
+            const completed = tasks.filter(t => t.completed).length;
+            const total = tasks.length;
+            const percent = total > 0 ? Math.round((completed / total) * 100) : 0;
+            document.getElementById('progressPercent').textContent = percent + '%';
+            document.getElementById('progressFill').style.width = percent + '%';
+        }
+
+        // TIMER FUNCTIONS
+        let timerInterval;
+        let timeLeft = 25 * 60;
+        let isRunning = false;
+
+        function updateTimerDisplay() {
+            const minutes = Math.floor(timeLeft / 60);
+            const seconds = timeLeft % 60;
+            document.getElementById('timerDisplay').textContent = 
+                `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        }
+
+        function startTimer() {
+            if (!isRunning) {
+                isRunning = true;
+                document.getElementById('startBtn').textContent = '▶ Running...';
+                timerInterval = setInterval(() => {
+                    timeLeft--;
+                    updateTimerDisplay();
+                    if (timeLeft <= 0) {
+                        pauseTimer();
+                        alert('⏰ Time\'s up! Great work! Take a break! 🎉');
+                        resetTimer();
+                    }
+                }, 1000);
+            }
+        }
+
+        function pauseTimer() {
+            isRunning = false;
+            clearInterval(timerInterval);
+            document.getElementById('startBtn').textContent = '▶ Start';
+        }
+
+        function resetTimer() {
+            pauseTimer();
+            timeLeft = 25 * 60;
+            updateTimerDisplay();
+        }
+
+        function setTimer(minutes) {
+            pauseTimer();
+            timeLeft = minutes * 60;
+            updateTimerDisplay();
+        }
+
+        document.getElementById('startBtn').addEventListener('click', startTimer);
+        document.getElementById('pauseBtn').addEventListener('click', pauseTimer);
+        document.getElementById('resetBtn').addEventListener('click', resetTimer);
+
+        // FLASHCARD FUNCTIONS
+        function addFlashcard(e) {
+            e.preventDefault();
+            const flashcard = {
+                id: Date.now(),
+                subject: document.getElementById('flashcardSubject').value,
+                question: document.getElementById('flashcardQ').value,
+                answer: document.getElementById('flashcardA').value
+            };
+            flashcards.push(flashcard);
+            localStorage.setItem('g8_flashcards', JSON.stringify(flashcards));
+            renderFlashcards();
+            e.target.reset();
+            if (flashcards.length === 1) {
+                currentCardIndex = 0;
+                showFlashcard();
+            }
+        }
+
+        function renderFlashcards() {
+            const list = document.getElementById('flashcardList');
+            if (flashcards.length === 0) {
+                list.innerHTML = '<div class="empty-state"><p>No flashcards yet</p></div>';
+                return;
+            }
+
+            list.innerHTML = flashcards.map((card, index) => {
+                const subject = subjectMap[card.subject];
+                return `
+                    <div class="flashcard-list-item">
+                        <div>
+                            <span class="subject-badge ${subject.class}">${subject.name}</span>
+                            <div style="margin-top: 0.5rem; color: var(--text-gray);">${card.question}</div>
+                        </div>
+                        <button class="btn btn-danger btn-small" onclick="deleteFlashcard(${index})">Delete</button>
+                    </div>
+                `;
+            }).join('');
+
+            document.getElementById('totalCards').textContent = flashcards.length;
+        }
+
+        function showFlashcard() {
+            if (flashcards.length === 0) {
+                document.getElementById('flashcardQuestion').textContent = 'Add your first flashcard to start reviewing!';
+                document.getElementById('flashcardAnswer').textContent = 'Click to add flashcards →';
+                document.getElementById('cardNumber').textContent = '0';
+                document.getElementById('totalCards').textContent = '0';
+                return;
+            }
+
+            const card = flashcards[currentCardIndex];
+            document.getElementById('flashcardQuestion').textContent = card.question;
+            document.getElementById('flashcardAnswer').textContent = card.answer;
+            document.getElementById('cardNumber').textContent = currentCardIndex + 1;
+            document.getElementById('flashcard').classList.remove('flipped');
+        }
+
+        function flipCard() {
+            if (flashcards.length > 0) {
+                document.getElementById('flashcard').classList.toggle('flipped');
+            }
+        }
+
+        function nextCard() {
+            if (flashcards.length > 0) {
+                currentCardIndex = (currentCardIndex + 1) % flashcards.length;
+                showFlashcard();
+            }
+        }
+
+        function previousCard() {
+            if (flashcards.length > 0) {
+                currentCardIndex = (currentCardIndex - 1 + flashcards.length) % flashcards.length;
+                showFlashcard();
+            }
+        }
+
+        function deleteFlashcard(index) {
+            if (confirm('Delete this flashcard?')) {
+                flashcards.splice(index, 1);
+                localStorage.setItem('g8_flashcards', JSON.stringify(flashcards));
+                if (currentCardIndex >= flashcards.length) {
+                    currentCardIndex = Math.max(0, flashcards.length - 1);
+                }
+                renderFlashcards();
+                showFlashcard();
+            }
+        }
+
+        // NOTES FUNCTIONS
+        function addNote(e) {
+            e.preventDefault();
+            const note = {
+                id: Date.now(),
+                subject: document.getElementById('noteSubject').value,
+                title: document.getElementById('noteTitle').value,
+                content: document.getElementById('noteContent').value,
+                date: new Date().toLocaleDateString('en-PH')
+            };
+            notes.unshift(note);
+            localStorage.setItem('g8_notes', JSON.stringify(notes));
+            renderNotes();
+            e.target.reset();
+        }
+
+        function renderNotes() {
+            const list = document.getElementById('notesList');
+            if (notes.length === 0) {
+                list.innerHTML = '<div class="empty-state"><div class="empty-state-icon">📝</div><p>No notes yet. Create your first note!</p></div>';
+                return;
+            }
+
+            list.innerHTML = notes.map(note => {
+                const subject = subjectMap[note.subject];
+                return `
+                    <div class="note-item">
+                        <div class="note-header">
+                            <div>
+                                <span class="subject-badge ${subject.class}">${subject.name}</span>
+                                <div class="note-subject">${note.title}</div>
+                            </div>
+                            <div style="text-align: right;">
+                                <div class="note-date">${note.date}</div>
+                                <button class="btn btn-danger btn-small" style="margin-top: 0.5rem;" onclick="deleteNote(${note.id})">Delete</button>
+                            </div>
+                        </div>
+                        <div class="note-content">${note.content}</div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function deleteNote(id) {
+            if (confirm('Delete this note?')) {
+                notes = notes.filter(n => n.id !== id);
+                localStorage.setItem('g8_notes', JSON.stringify(notes));
+                renderNotes();
+            }
+        }
+
+        // LESSONS DATABASE AND FUNCTIONS
+        const lessonsDatabase = {
+            mathematics: [
+                {
+                    id: 'math-1',
+                    title: 'Linear Equations',
+                    content: `
+                        <h3 style="color: var(--accent); margin-bottom: 1rem;">What are Linear Equations?</h3>
+                        <p>A linear equation is an equation where the highest power of the variable is 1. It forms a straight line when graphed.</p>
+                        
+                        <h4 style="color: var(--text-white); margin-top: 1.5rem; margin-bottom: 0.8rem;">Standard Form:</h4>
+                        <p style="background: var(--bg-dark); padding: 1rem; border-radius: 8px; font-family: monospace;">
+                            ax + b = c
+                        </p>
+                        
+                        <h4 style="color: var(--text-white); margin-top: 1.5rem; margin-bottom: 0.8rem;">Example:</h4>
+                        <p>Solve: 2x + 5 = 13</p>
+                        <p style="background: var(--bg-dark); padding: 1rem; border-radius: 8px;">
+                            Step 1: Subtract 5 from both sides<br>
+                            2x = 8<br><br>
+                            Step 2: Divide both sides by 2<br>
+                            x = 4
+                        </p>
+                        
+                        <h4 style="color: var(--text-white); margin-top: 1.5rem; margin-bottom: 0.8rem;">Key Points:</h4>
+                        <ul style="margin-left: 1.5rem; line-height: 2;">
+                            <li>Always perform the same operation on both sides</li>
+                            <li>Isolate the variable on one side</li>
+                            <li>Check your answer by substituting back</li>
+                        </ul>
+                    `,
+                    quiz: [
+                        { question: 'Solve: 3x + 7 = 16', options: ['x = 3', 'x = 4', 'x = 5', 'x = 6'], answer: 0 },
+                        { question: 'What is the first step in solving: 5x - 2 = 18?', options: ['Divide by 5', 'Add 2 to both sides', 'Subtract 5', 'Multiply by 2'], answer: 1 },
+                        { question: 'If 4x = 20, then x = ?', options: ['4', '5', '6', '80'], answer: 1 }
+                    ]
+                },
+                {
+                    id: 'math-2',
+                    title: 'Pythagorean Theorem',
+                    content: `
+                        <h3 style="color: var(--accent); margin-bottom: 1rem;">The Pythagorean Theorem</h3>
+                        <p>One of the most famous theorems in mathematics! It relates the sides of a right triangle.</p>
+                        
+                        <h4 style="color: var(--text-white); margin-top: 1.5rem; margin-bottom: 0.8rem;">The Formula:</h4>
+                        <p style="background: var(--bg-dark); padding: 1.5rem; border-radius: 8px; font-family: monospace; font-size: 1.2rem; text-align: center;">
+                            a² + b² = c²
+                        </p>
+                        <p>Where c is the hypotenuse (longest side) and a, b are the other two sides.</p>
+                        
+                        <h4 style="color: var(--text-white); margin-top: 1.5rem; margin-bottom: 0.8rem;">Example:</h4>
+                        <p>Find the hypotenuse if a = 3 and b = 4</p>
+                        <p style="background: var(--bg-dark); padding: 1rem; border-radius: 8px;">
+                            3² + 4² = c²<br>
+                            9 + 16 = c²<br>
+                            25 = c²<br>
+                            c = 5
+                        </p>
+                    `,
+                    quiz: [
+                        { question: 'If a = 6 and b = 8, what is c?', options: ['10', '12', '14', '16'], answer: 0 },
+                        { question: 'The Pythagorean theorem only works for which type of triangle?', options: ['Equilateral', 'Right', 'Isosceles', 'Scalene'], answer: 1 }
+                    ]
+                }
+            ],
+            science: [
+                {
+                    id: 'sci-1',
+                    title: 'The Cell Theory',
+                    content: `
+                        <h3 style="color: var(--accent); margin-bottom: 1rem;">Cell Theory - Foundation of Biology</h3>
+                        <p>The cell theory is one of the fundamental principles of biology.</p>
+                        
+                        <h4 style="color: var(--text-white); margin-top: 1.5rem; margin-bottom: 0.8rem;">Three Main Principles:</h4>
+                        <ol style="margin-left: 1.5rem; line-height: 2;">
+                            <li><strong>All living things are made of cells</strong> - Whether single-celled or multi-celled</li>
+                            <li><strong>Cells are the basic unit of life</strong> - The smallest unit that can perform all life processes</li>
+                            <li><strong>All cells come from pre-existing cells</strong> - Through cell division</li>
+                        </ol>
+                        
+                        <h4 style="color: var(--text-white); margin-top: 1.5rem; margin-bottom: 0.8rem;">Types of Cells:</h4>
+                        <p style="background: var(--bg-dark); padding: 1rem; border-radius: 8px;">
+                            <strong>Prokaryotic Cells:</strong> No nucleus (bacteria)<br>
+                            <strong>Eukaryotic Cells:</strong> Have a nucleus (animals, plants, fungi)
+                        </p>
+                    `,
+                    quiz: [
+                        { question: 'What is the basic unit of life?', options: ['Tissue', 'Organ', 'Cell', 'Molecule'], answer: 2 },
+                        { question: 'Which type of cell has a nucleus?', options: ['Prokaryotic', 'Eukaryotic', 'Both', 'Neither'], answer: 1 },
+                        { question: 'All cells come from...', options: ['Nothing', 'Pre-existing cells', 'Chemicals', 'Air'], answer: 1 }
+                    ]
+                },
+                {
+                    id: 'sci-2',
+                    title: 'Photosynthesis',
+                    content: `
+                        <h3 style="color: var(--accent); margin-bottom: 1rem;">Photosynthesis - How Plants Make Food</h3>
+                        <p>Photosynthesis is the process plants use to convert light energy into chemical energy (glucose).</p>
+                        
+                        <h4 style="color: var(--text-white); margin-top: 1.5rem; margin-bottom: 0.8rem;">The Equation:</h4>
+                        <p style="background: var(--bg-dark); padding: 1.5rem; border-radius: 8px; text-align: center;">
+                            6CO₂ + 6H₂O + Light Energy → C₆H₁₂O₆ + 6O₂
+                        </p>
+                        
+                        <h4 style="color: var(--text-white); margin-top: 1.5rem; margin-bottom: 0.8rem;">What's Needed:</h4>
+                        <ul style="margin-left: 1.5rem; line-height: 2;">
+                            <li>Carbon dioxide (CO₂) from air</li>
+                            <li>Water (H₂O) from soil</li>
+                            <li>Light energy from sun</li>
+                            <li>Chlorophyll (green pigment)</li>
+                        </ul>
+                        
+                        <h4 style="color: var(--text-white); margin-top: 1.5rem; margin-bottom: 0.8rem;">Products:</h4>
+                        <ul style="margin-left: 1.5rem; line-height: 2;">
+                            <li>Glucose (C₆H₁₂O₆) - plant food</li>
+                            <li>Oxygen (O₂) - released to air</li>
+                        </ul>
+                    `,
+                    quiz: [
+                        { question: 'What gas do plants take in during photosynthesis?', options: ['Oxygen', 'Nitrogen', 'Carbon dioxide', 'Hydrogen'], answer: 2 },
+                        { question: 'What is the main product of photosynthesis?', options: ['Water', 'Glucose', 'Carbon dioxide', 'Chlorophyll'], answer: 1 }
+                    ]
+                }
+            ],
+            english: [
+                {
+                    id: 'eng-1',
+                    title: 'Parts of Speech',
+                    content: `
+                        <h3 style="color: var(--accent); margin-bottom: 1rem;">The 8 Parts of Speech</h3>
+                        <p>Every word in English belongs to one of eight categories.</p>
+                        
+                        <div style="background: var(--bg-dark); padding: 1.5rem; border-radius: 8px; margin-top: 1rem;">
+                            <p><strong style="color: var(--accent);">1. Noun:</strong> Person, place, thing, or idea (dog, Manila, happiness)</p>
+                            <p><strong style="color: var(--accent);">2. Pronoun:</strong> Replaces a noun (he, she, it, they)</p>
+                            <p><strong style="color: var(--accent);">3. Verb:</strong> Action or state of being (run, is, think)</p>
+                            <p><strong style="color: var(--accent);">4. Adjective:</strong> Describes a noun (beautiful, tall, blue)</p>
+                            <p><strong style="color: var(--accent);">5. Adverb:</strong> Describes a verb (quickly, very, happily)</p>
+                            <p><strong style="color: var(--accent);">6. Preposition:</strong> Shows relationship (in, on, under, before)</p>
+                            <p><strong style="color: var(--accent);">7. Conjunction:</strong> Connects words/phrases (and, but, or)</p>
+                            <p><strong style="color: var(--accent);">8. Interjection:</strong> Shows emotion (Wow! Oh! Ouch!)</p>
+                        </div>
+                    `,
+                    quiz: [
+                        { question: 'What part of speech is "quickly"?', options: ['Adjective', 'Adverb', 'Verb', 'Noun'], answer: 1 },
+                        { question: 'Which is a conjunction?', options: ['Beautiful', 'And', 'Run', 'Happy'], answer: 1 },
+                        { question: 'What describes a noun?', options: ['Verb', 'Adverb', 'Adjective', 'Pronoun'], answer: 2 }
+                    ]
+                }
+            ],
+            filipino: [
+                {
+                    id: 'fil-1',
+                    title: 'Pang-uri (Adjectives)',
+                    content: `
+                        <h3 style="color: var(--accent); margin-bottom: 1rem;">Pang-uri sa Filipino</h3>
+                        <p>Ang pang-uri ay naglalarawan sa pangngalan o panghalip.</p>
+                        
+                        <h4 style="color: var(--text-white); margin-top: 1.5rem; margin-bottom: 0.8rem;">Uri ng Pang-uri:</h4>
+                        <div style="background: var(--bg-dark); padding: 1.5rem; border-radius: 8px;">
+                            <p><strong style="color: var(--accent);">Panlarawan:</strong> maganda, matalino, mabait</p>
+                            <p><strong style="color: var(--accent);">Pamilang:</strong> isa, dalawa, marami</p>
+                            <p><strong style="color: var(--accent);">Pantangi:</strong> Filipino, Pilipino, Amerikano</p>
+                        </div>
+                        
+                        <h4 style="color: var(--text-white); margin-top: 1.5rem; margin-bottom: 0.8rem;">Halimbawa:</h4>
+                        <p style="background: var(--bg-dark); padding: 1rem; border-radius: 8px;">
+                            Ang <strong style="color: var(--accent);">magandang</strong> bulaklak<br>
+                            Si <strong style="color: var(--accent);">matalinong</strong> estudyante<br>
+                            Ang <strong style="color: var(--accent);">tatlong</strong> libro
+                        </p>
+                    `,
+                    quiz: [
+                        { question: 'Ano ang pang-uri sa "Ang matalinong bata"?', options: ['Ang', 'matalinong', 'bata', 'wala'], answer: 1 },
+                        { question: 'Anong uri ng pang-uri ang "dalawa"?', options: ['Panlarawan', 'Pamilang', 'Pantangi', 'Wala sa nabanggit'], answer: 1 }
+                    ]
+                }
+            ],
+            cs: [
+                {
+                    id: 'cs-1',
+                    title: 'Introduction to Programming',
+                    content: `
+                        <h3 style="color: var(--accent); margin-bottom: 1rem;">What is Programming?</h3>
+                        <p>Programming is giving instructions to a computer to perform tasks.</p>
+                        
+                        <h4 style="color: var(--text-white); margin-top: 1.5rem; margin-bottom: 0.8rem;">Basic Concepts:</h4>
+                        <div style="background: var(--bg-dark); padding: 1.5rem; border-radius: 8px;">
+                            <p><strong style="color: var(--accent);">Variables:</strong> Store data (like a box with a label)</p>
+                            <p><strong style="color: var(--accent);">Functions:</strong> Reusable blocks of code</p>
+                            <p><strong style="color: var(--accent);">Loops:</strong> Repeat actions</p>
+                            <p><strong style="color: var(--accent);">Conditions:</strong> Make decisions (if/else)</p>
+                        </div>
+                        
+                        <h4 style="color: var(--text-white); margin-top: 1.5rem; margin-bottom: 0.8rem;">Example (Python):</h4>
+                        <p style="background: var(--bg-dark); padding: 1rem; border-radius: 8px; font-family: monospace;">
+                            name = "Juan"<br>
+                            age = 13<br>
+                            print("Hello, " + name)<br>
+                            print("You are " + str(age) + " years old")
+                        </p>
+                    `,
+                    quiz: [
+                        { question: 'What stores data in programming?', options: ['Function', 'Variable', 'Loop', 'Condition'], answer: 1 },
+                        { question: 'What do loops do?', options: ['Store data', 'Repeat actions', 'Make decisions', 'Print text'], answer: 1 }
+                    ]
+                }
+            ],
+            biotech: [
+                {
+                    id: 'bio-1',
+                    title: 'DNA Structure',
+                    content: `
+                        <h3 style="color: var(--accent); margin-bottom: 1rem;">DNA - The Blueprint of Life</h3>
+                        <p>DNA (Deoxyribonucleic Acid) contains all genetic information.</p>
+                        
+                        <h4 style="color: var(--text-white); margin-top: 1.5rem; margin-bottom: 0.8rem;">Structure:</h4>
+                        <div style="background: var(--bg-dark); padding: 1.5rem; border-radius: 8px;">
+                            <p>🧬 <strong>Double Helix:</strong> Twisted ladder shape</p>
+                            <p>🔗 <strong>Base Pairs:</strong> A-T and C-G</p>
+                            <p>📊 <strong>Components:</strong> Sugar, phosphate, nitrogen bases</p>
+                        </div>
+                        
+                        <h4 style="color: var(--text-white); margin-top: 1.5rem; margin-bottom: 0.8rem;">Four Bases:</h4>
+                        <ul style="margin-left: 1.5rem; line-height: 2;">
+                            <li>Adenine (A) pairs with Thymine (T)</li>
+                            <li>Cytosine (C) pairs with Guanine (G)</li>
+                        </ul>
+                        
+                        <p style="margin-top: 1rem;">DNA stores instructions for making proteins, which control all cell functions!</p>
+                    `,
+                    quiz: [
+                        { question: 'What does DNA stand for?', options: ['Dioxyribonucleic Acid', 'Deoxyribonucleic Acid', 'Double Nuclear Acid', 'None'], answer: 1 },
+                        { question: 'Which base pairs with Adenine?', options: ['Cytosine', 'Guanine', 'Thymine', 'Uracil'], answer: 2 }
+                    ]
+                }
+            ]
+        };
+
+        let currentLesson = null;
+
+        function selectLessonSubject(subject) {
+            const topics = lessonsDatabase[subject] || [];
+            const topicsDiv = document.getElementById('lessonTopics');
+            
+            if (topics.length === 0) {
+                topicsDiv.innerHTML = '<div class="empty-state"><p>No lessons available yet for this subject</p></div>';
+                return;
+            }
+
+            topicsDiv.innerHTML = topics.map(lesson => `
+                <div class="task-item" style="cursor: pointer;" onclick="loadLesson('${subject}', '${lesson.id}')">
+                    <div class="task-header">
+                        <div class="task-title">${lesson.title}</div>
+                        <span style="color: var(--accent);">📖 Learn →</span>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function loadLesson(subject, lessonId) {
+            const lessons = lessonsDatabase[subject];
+            const lesson = lessons.find(l => l.id === lessonId);
+            
+            if (!lesson) return;
+            
+            currentLesson = lesson;
+            document.getElementById('lessonTitle').textContent = lesson.title;
+            document.getElementById('lessonBody').innerHTML = lesson.content;
+            document.getElementById('lessonContent').style.display = 'block';
+            document.getElementById('quizSection').style.display = 'none';
+            document.getElementById('quizResults').innerHTML = '';
+            
+            window.scrollTo({ top: document.getElementById('lessonContent').offsetTop - 100, behavior: 'smooth' });
+        }
+
+        function closeLesson() {
+            document.getElementById('lessonContent').style.display = 'none';
+            currentLesson = null;
+        }
+
+        function showQuiz() {
+            if (!currentLesson || !currentLesson.quiz) {
+                alert('No quiz available for this lesson');
+                return;
+            }
+
+            const quizDiv = document.getElementById('quizQuestions');
+            quizDiv.innerHTML = currentLesson.quiz.map((q, index) => `
+                <div style="background: var(--bg-dark); padding: 1.5rem; border-radius: 12px; margin-bottom: 1rem;">
+                    <p style="font-weight: 600; margin-bottom: 1rem; color: var(--text-white);">
+                        ${index + 1}. ${q.question}
+                    </p>
+                    ${q.options.map((opt, optIndex) => `
+                        <label style="display: block; padding: 0.8rem; margin-bottom: 0.5rem; background: var(--bg-medium); border-radius: 8px; cursor: pointer; transition: all 0.3s;">
+                            <input type="radio" name="q${index}" value="${optIndex}" style="margin-right: 0.8rem;">
+                            ${opt}
+                        </label>
+                    `).join('')}
+                </div>
+            `).join('');
+
+            document.getElementById('quizSection').style.display = 'block';
+            document.getElementById('quizResults').innerHTML = '';
+            window.scrollTo({ top: document.getElementById('quizSection').offsetTop - 100, behavior: 'smooth' });
+        }
+
+        function checkAnswers() {
+            if (!currentLesson) return;
+
+            let correct = 0;
+            const total = currentLesson.quiz.length;
+
+            currentLesson.quiz.forEach((q, index) => {
+                const selected = document.querySelector(`input[name="q${index}"]:checked`);
+                if (selected && parseInt(selected.value) === q.answer) {
+                    correct++;
+                }
+            });
+
+            const percentage = Math.round((correct / total) * 100);
+            const resultsDiv = document.getElementById('quizResults');
+            
+            let message = '';
+            let color = '';
+            
+            if (percentage === 100) {
+                message = '🎉 Perfect! You got everything right!';
+                color = 'var(--success)';
+            } else if (percentage >= 70) {
+                message = '👍 Great job! You passed!';
+                color = 'var(--accent)';
+            } else {
+                message = '📚 Keep studying! You can do better!';
+                color = 'var(--danger)';
+            }
+
+            resultsDiv.innerHTML = `
+                <div style="background: var(--bg-dark); padding: 2rem; border-radius: 12px; text-align: center; border: 2px solid ${color};">
+                    <h3 style="color: ${color}; font-size: 1.5rem; margin-bottom: 1rem;">${message}</h3>
+                    <p style="font-size: 2rem; font-weight: 700; color: var(--text-white);">
+                        ${correct} / ${total} correct (${percentage}%)
+                    </p>
+                </div>
+            `;
+        }
+
+        // MUSIC PLAYER FUNCTIONS
+        const spotifyPlaylists = {
+            lofi: '37i9dQZF1DWWQRwui0ExPn', // Lo-fi Beats
+            classical: '37i9dQZF1DWWEJlAGA9gs0', // Classical Essentials
+            ambient: '37i9dQZF1DX3Ogo9pFvBkY', // Ambient Relaxation
+            kpop: '37i9dQZF1DX9tPFwDMOaN1', // K-Pop Daebak
+            opm: '37i9dQZF1DX3j7TjAXwV6W', // OPM Love Songs
+            focus: '37i9dQZF1DWZeKCadgRdKQ', // Deep Focus
+            energetic: '37i9dQZF1DX3rxVfibe1L0', // Power Hour
+            calm: '37i9dQZF1DX1s9knjP51Oa', // Peaceful Piano
+            motivated: '37i9dQZF1DX76Wlfdnj7AP', // Beast Mode
+            creative: '37i9dQZF1DX2sUQwD7tbmL' // Indie Pop
+        };
+
+        const musicRecommendations = {
+            focus: {
+                title: 'Deep Focus Mode',
+                playlists: ['Lo-fi Hip Hop Radio', 'Deep Focus', 'Peaceful Piano', 'Ambient Study'],
+                description: 'Instrumental beats and ambient sounds to help you concentrate'
+            },
+            energetic: {
+                title: 'Energetic Study',
+                playlists: ['Pop Hits', 'Dance Party', 'Happy Hits', 'Upbeat Indie'],
+                description: 'Upbeat music to keep your energy high while studying'
+            },
+            calm: {
+                title: 'Calm & Relaxed',
+                playlists: ['Peaceful Guitar', 'Calm Vibes', 'Acoustic Concentration', 'Soft Pop'],
+                description: 'Soothing acoustic and soft melodies for relaxed studying'
+            },
+            motivated: {
+                title: 'Motivation Boost',
+                playlists: ['Workout Beats', 'Hip-Hop Study', 'Motivational Mix', 'Beast Mode'],
+                description: 'High-energy tracks to keep you motivated and pumped'
+            },
+            creative: {
+                title: 'Creative Flow',
+                playlists: ['Indie Mix', 'Alternative Study', 'Chill Indie', 'Creative Focus'],
+                description: 'Indie and alternative music for creative thinking'
+            }
+        };
+
+        function savePreferences() {
+            const mood = document.getElementById('studyMood').value;
+            const artists = document.getElementById('favoriteArtists').value;
+
+            if (!mood && !artists) {
+                alert('Please select a mood or enter your favorite artists!');
+                return;
+            }
+
+            const preferences = { mood, artists };
+            localStorage.setItem('musicPreferences', JSON.stringify(preferences));
+            
+            updateMusicRecommendations();
+            alert('✅ Preferences saved! Check out your personalized recommendations below!');
+        }
+
+        function updateMusicRecommendations() {
+            const mood = document.getElementById('studyMood').value;
+            const artists = document.getElementById('favoriteArtists').value;
+            const recommendDiv = document.getElementById('musicRecommendations');
+
+            if (!mood && !artists) {
+                recommendDiv.innerHTML = '<div class="empty-state"><div class="empty-state-icon">🎵</div><p>Set your preferences to get personalized recommendations!</p></div>';
+                return;
+            }
+
+            let html = '';
+
+            // Mood-based recommendations
+            if (mood && musicRecommendations[mood]) {
+                const rec = musicRecommendations[mood];
+                html += `
+                    <div style="background: var(--bg-dark); padding: 1.5rem; border-radius: 12px; margin-bottom: 1rem;">
+                        <h3 style="color: var(--accent); margin-bottom: 0.5rem;">${rec.title}</h3>
+                        <p style="font-size: 0.9rem; color: var(--text-gray); margin-bottom: 1rem;">${rec.description}</p>
+                        <div style="display: flex; flex-wrap: wrap; gap: 0.5rem;">
+                            ${rec.playlists.map(p => `
+                                <span style="background: var(--bg-medium); padding: 0.5rem 1rem; border-radius: 20px; font-size: 0.85rem;">
+                                    🎵 ${p}
+                                </span>
+                            `).join('')}
+                        </div>
+                    </div>
+                `;
+            }
+
+            // Artist-based recommendations
+            if (artists) {
+                const artistList = artists.split(',').map(a => a.trim()).filter(a => a);
+                html += `
+                    <div style="background: var(--bg-dark); padding: 1.5rem; border-radius: 12px;">
+                        <h3 style="color: var(--accent); margin-bottom: 0.5rem;">Based on Your Artists</h3>
+                        <p style="font-size: 0.9rem; color: var(--text-gray); margin-bottom: 1rem;">
+                            Search these on Spotify for similar vibes:
+                        </p>
+                        <div style="display: flex; flex-wrap: wrap; gap: 0.5rem;">
+                            ${artistList.map(artist => `
+                                <span style="background: linear-gradient(135deg, var(--primary), var(--secondary)); padding: 0.5rem 1rem; border-radius: 20px; font-size: 0.85rem;">
+                                    ⭐ ${artist}
+                                </span>
+                            `).join('')}
+                        </div>
+                        <p style="font-size: 0.85rem; color: var(--text-gray); margin-top: 1rem;">
+                            💡 Try searching: "${artistList[0]} Radio" or "${artistList[0]} Mix" on Spotify
+                        </p>
+                    </div>
+                `;
+            }
+
+            recommendDiv.innerHTML = html;
+        }
+
+        function loadPlaylist(type) {
+            const playlistId = spotifyPlaylists[type];
+            const embedDiv = document.getElementById('playlistEmbed');
+            const embedCard = document.getElementById('spotifyEmbed');
+
+            if (!playlistId) {
+                alert('Playlist not available');
+                return;
+            }
+
+            embedDiv.innerHTML = `
+                <iframe 
+                    style="border-radius:12px; width: 100%;" 
+                    src="https://open.spotify.com/embed/playlist/${playlistId}?utm_source=generator&theme=0" 
+                    width="100%" 
+                    height="380" 
+                    frameBorder="0" 
+                    allowfullscreen="" 
+                    allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" 
+                    loading="lazy">
+                </iframe>
+            `;
+
+            embedCard.style.display = 'block';
+            
+            // Scroll to player
+            setTimeout(() => {
+                embedCard.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            }, 100);
+        }
+
+        // Load saved preferences on page load
+        function loadMusicPreferences() {
+            const saved = localStorage.getItem('musicPreferences');
+            if (saved) {
+                const prefs = JSON.parse(saved);
+                if (prefs.mood) document.getElementById('studyMood').value = prefs.mood;
+                if (prefs.artists) document.getElementById('favoriteArtists').value = prefs.artists;
+                updateMusicRecommendations();
+            }
+        }
+
+        // Initialize app
+        renderTasks();
+        renderFlashcards();
+        renderNotes();
+        showFlashcard();
+        loadMusicPreferences();
+    </script>
+</body>
+</html>
